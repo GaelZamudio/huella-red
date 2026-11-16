@@ -1,31 +1,11 @@
-<!doctype html>
-<html lang="es" data-theme="light">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HuellaRed</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css">
-  <style>
-    :root { --pico-primary: #1f6f5c; --pico-primary-hover: #17574a; --pico-primary-background: #1f6f5c; --pico-primary-hover-background: #17574a; }
-    .aviso { border-left: 4px solid var(--pico-primary); padding: .6rem 1rem; background: var(--pico-card-background-color); margin-bottom: 1rem; }
-  </style>
-</head>
-<body>
-  <header class="container">
-    <nav>
-      <ul><li><strong>HuellaRed</strong></li></ul>
-      {% if rol %}
-      <ul>
-        <li><a href="{{ url_for('ver_tabla', nombre='rescate') }}">Registros</a></li>
-        <li><a href="{{ url_for('rescate_nuevo') }}">Nuevo rescate</a></li>
-        <li><a href="{{ url_for('logout') }}">Salir (rol: {{ rol }})</a></li>
-      </ul>
-      {% endif %}
-    </nav>
-  </header>
-  <main class="container">
-    {% for m in get_flashed_messages() %}<p class="aviso">{{ m }}</p>{% endfor %}
-    {% block c %}{% endblock %}
-  </main>
-</body>
-</html>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block t %}HuellaRed{% endblock %}</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&display=swap">
+<link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}"></head><body>
+<div class="app">
+<input type="checkbox" id="m"><label class="burger" for="m">☰ Menú</label>
+<aside class="side"><a class="brand" href="{{ url_for('panel') }}">{% include "_logo.html" %}<span>HuellaRed</span></a>
+<a class="nav {{ 'on' if request.path=='/panel' }}" href="{{ url_for('panel') }}">Panel</a>
+{% for sec, items in menu.items() %}<h4>{{ sec }}</h4>{% for p in items %}<a class="nav {{ 'on' if request.path==url_for('modulo', slug=p.slug) }}" href="{{ url_for('modulo', slug=p.slug) }}">{{ p.titulo }}</a>{% endfor %}{% endfor %}
+{% if rol %}<div class="yo">Sesión: <b>{{ rol_nombre }}</b><br><a href="{{ url_for('logout') }}">Cerrar sesión</a></div>{% endif %}</aside>
+<main>{% for m in get_flashed_messages() %}<p class="aviso">{{ m }}</p>{% endfor %}{% block c %}{% endblock %}</main></div></body></html>

@@ -1,13 +1,18 @@
-{% extends "base.html" %}{% block c %}
-<h1>Iniciar sesión</h1>
-<form method="post">
-  <input type="hidden" name="_csrf" value="{{ csrf }}">
-  <label>Rol
-    <select name="rol" required>
-      {% for r in roles %}<option value="{{ r }}">{{ r }}</option>{% endfor %}
-    </select>
-  </label>
-  <label>Contraseña <input type="password" name="password" required></label>
-  <button type="submit">Entrar</button>
-</form>
-{% endblock %}
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Iniciar sesión · HuellaRed</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&display=swap">
+<link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}"></head><body>
+<div class="login">
+<section class="hero"><div class="brand">{% include "_logo.html" %}<span>HuellaRed</span></div>
+<h1>Cada rescate cuenta una historia.</h1>
+<p>Red de rescate y adopción responsable: del reporte en la calle al hogar definitivo, con seguimiento y atención médica.</p></section>
+<section class="formbox"><div>
+<h2>Iniciar sesión</h2>
+{% for m in get_flashed_messages() %}<p class="aviso">{{ m }}</p>{% endfor %}
+<form method="post"><input type="hidden" name="_csrf" value="{{ csrf }}">
+{% for k, (nombre, desc) in roles.items() %}
+<label class="rol"><input type="radio" name="rol" value="{{ k }}" {{ 'checked' if loop.first }} required><span><b>{{ nombre }}</b><small>{{ desc }}</small></span></label>
+{% endfor %}
+<label for="password">Contraseña</label><input id="password" type="password" name="password" required>
+<p><button type="submit" style="width:100%">Entrar</button></p></form>
+</div></section></div></body></html>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block c %}
+<div class="cab"><div><h1>{{ p.titulo }}</h1><p>{{ p.seccion }}</p></div>
+<div>{% if nuevo %}<a class="btn" href="{{ url_for(nuevo) }}">+ Nuevo</a>{% else %}<span class="btn off" title="Formulario pendiente">+ Nuevo</span>{% endif %}</div></div>
+<div class="barra"><input placeholder="Buscar…" disabled><select disabled><option>Todos</option></select></div>
+{% if p.tabla %}
+{% if filas %}<div class="card tabla"><table><thead><tr>{% for k in filas[0] %}<th>{{ k.replace('_',' ') }}</th>{% endfor %}</tr></thead><tbody>
+{% for f in filas %}<tr>{% for k, v in f.items() %}<td>{% if v is none %}—{% elif v is sameas true %}Sí{% elif v is sameas false %}No{% elif k in ('estado','estado_actual') %}<span class="badge">{{ v }}</span>{% else %}{{ v }}{% endif %}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+<p><small>Últimos 50 registros.</small></p>
+{% else %}<div class="card vacio">Sin registros todavía.</div>{% endif %}
+{% else %}
+<div class="grid">{% for _ in range(3) %}<div class="card"><i class="sk s"></i><i class="sk"></i></div>{% endfor %}</div>
+<div class="card">{% for _ in range(5) %}<i class="sk"></i>{% endfor %}<p class="vacio">Módulo en preparación.</p></div>
+{% endif %}
+{% if dev %}<div class="card" style="margin-top:1rem"><span class="badge dev">Pendiente (modo desarrollo)</span><p>{{ p.pendiente }}</p></div>{% endif %}
+{% endblock %}

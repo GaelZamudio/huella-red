@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block c %}
+<div class="cab"><div><h1>Panel</h1><p>Resumen de la operación de HuellaRed.</p></div>
+{% if rol in ('app','admin') %}<a class="btn" href="{{ url_for('rescate_nuevo') }}">+ Registrar rescate</a>{% endif %}</div>
+<div class="grid">{% for n, v in cifras %}<div class="card stat"><b>{{ v }}</b><span>{{ n }}</span></div>{% endfor %}</div>
+<div class="card"><h2>Últimos rescates</h2>
+{% if recientes %}<div class="tabla"><table><thead><tr><th>#</th><th>Fecha</th><th>Ingreso</th><th>Zona</th></tr></thead><tbody>
+{% for r in recientes %}<tr><td>{{ r.id_rescate }}</td><td>{{ r.fecha_hora.strftime('%d/%m/%Y %H:%M') }}</td><td>{{ r.tipo_ingreso.replace('_',' ') }}</td><td>{{ r.colonia }}, {{ r.municipio }}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="vacio">Aún no hay rescates registrados.</p>{% endif %}</div>
+{% endblock %}
