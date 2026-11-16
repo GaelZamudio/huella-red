@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block c %}
+<h1>Registrar rescate</h1>
+<form method="post">
+  <input type="hidden" name="_csrf" value="{{ csrf }}">
+  <label>Lugar del rescate
+    <input name="descripcion_lugar" maxlength="200" required value="{{ v.get('descripcion_lugar','') }}">
+  </label>
+  <label>Fecha y hora
+    <input type="datetime-local" name="fecha_hora" required value="{{ v.get('fecha_hora','') }}">
+  </label>
+  <label>Condición inicial del animal
+    <input name="condicion_inicial" maxlength="200" required value="{{ v.get('condicion_inicial','') }}">
+  </label>
+  <label>Tipo de ingreso
+    <select name="tipo_ingreso" required>
+      {% for t in tipos %}<option value="{{ t }}" {{ 'selected' if v.get('tipo_ingreso')==t }}>{{ t.replace('_',' ') }}</option>{% endfor %}
+    </select>
+  </label>
+  <label>Zona
+    <select name="id_zona" required>
+      {% for z in zonas %}<option value="{{ z.id_zona }}" {{ 'selected' if v.get('id_zona')==z.id_zona|string }}>{{ z.colonia }}, {{ z.municipio }}</option>{% endfor %}
+    </select>
+  </label>
+  <fieldset>
+    <legend>Rescatistas que participaron (opcional)</legend>
+    {% for r in rescatistas %}
+    <label><input type="checkbox" name="rescatistas" value="{{ r.id_persona }}" {{ 'checked' if r.id_persona|string in v.getlist('rescatistas') }}> {{ r.nombre }}</label>
+    {% endfor %}
+  </fieldset>
+  <button type="submit">Guardar rescate</button>
+</form>
+{% endblock %}

@@ -1,0 +1,13 @@
+# Datos persistentes y secretos locales (no forman parte del código).
+/data/
+.env
+.env.*
+!.env.example
+
+# Archivos generados por Python y herramientas locales.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.log

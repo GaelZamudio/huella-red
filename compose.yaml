@@ -1,0 +1,75 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres_huellared
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Completa POSTGRES_DB en .env}
+      POSTGRES_USER: ${POSTGRES_USER:?Completa POSTGRES_USER en .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Completa POSTGRES_PASSWORD en .env}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\"" ]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+    restart: unless-stopped
+
+  configurar:
+    build: ./db
+    environment:
+      PGHOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      HUELLARED_APP_PASSWORD: ${HUELLARED_APP_PASSWORD:?Completa HUELLARED_APP_PASSWORD en .env}
+      HUELLARED_CONSULTA_PASSWORD: ${HUELLARED_CONSULTA_PASSWORD:?Completa HUELLARED_CONSULTA_PASSWORD en .env}
+      HUELLARED_ADMIN_PASSWORD: ${HUELLARED_ADMIN_PASSWORD:?Completa HUELLARED_ADMIN_PASSWORD en .env}
+    command: [ "python", "inicializar.py" ]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  semilla:
+    image: postgres:17
+    environment:
+      PGHOST: postgres
+      PGDATABASE: ${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./db/semilla.sql:/semilla.sql:ro
+    command: [ "psql", "-v", "ON_ERROR_STOP=1", "-f", "/semilla.sql" ]
+    depends_on:
+      configurar:
+        condition: service_completed_successfully
+    restart: "no"
+
+  web:
+    build: ./web
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: ${POSTGRES_DB}
+      SECRET_KEY: ${SECRET_KEY:?Completa SECRET_KEY en .env}
+      COOKIE_SECURE: ${COOKIE_SECURE:-1}
+      DB_USER_APP: huellared_app
+      DB_PASS_APP: ${HUELLARED_APP_PASSWORD}
+      DB_USER_CONSULTA: huellared_consulta
+      DB_PASS_CONSULTA: ${HUELLARED_CONSULTA_PASSWORD}
+      DB_USER_ADMIN: huellared_admin
+      DB_PASS_ADMIN: ${HUELLARED_ADMIN_PASSWORD}
+      LOGIN_PASS_APP: ${LOGIN_PASS_APP:?Completa LOGIN_PASS_APP en .env}
+      LOGIN_PASS_CONSULTA: ${LOGIN_PASS_CONSULTA:?Completa LOGIN_PASS_CONSULTA en .env}
+      LOGIN_PASS_ADMIN: ${LOGIN_PASS_ADMIN:?Completa LOGIN_PASS_ADMIN en .env}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      semilla:
+        condition: service_completed_successfully
+    restart: unless-stopped

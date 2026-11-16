@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block c %}
+<h1>{{ nombre }}</h1>
+<p>{% for t in tablas %}<a href="{{ url_for('ver_tabla', nombre=t) }}" {{ 'aria-current=page' if t==nombre }}>{{ t }}</a>{{ ' · ' if not loop.last }}{% endfor %}</p>
+{% if filas %}
+<div class="overflow-auto"><table>
+  <thead><tr>{% for k in filas[0] %}<th>{{ k }}</th>{% endfor %}</tr></thead>
+  <tbody>{% for f in filas %}<tr>{% for val in f.values() %}<td>{{ val }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+</table></div>
+<p><small>Últimos 20 registros. Recarga la página para ver los nuevos.</small></p>
+{% else %}<p>Todavía no hay registros en esta tabla.</p>{% endif %}
+{% endblock %}
