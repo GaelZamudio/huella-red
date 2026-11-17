@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block c %}
+<div class="cab"><div><h1>Solicitudes de adopción</h1><p>Revisa, aprueba o rechaza.</p></div></div>
+<details class="card"><summary>+ Nueva solicitud</summary>
+<form method="post" action="{{ url_for('solicitud_nueva') }}"><input type="hidden" name="_csrf" value="{{ csrf }}">
+<label>Animal disponible<select name="id_animal" required>{% for a in animales %}<option value="{{ a.id_animal }}">{{ a.nombre or 'Sin nombre' }} (#{{ a.id_animal }})</option>{% endfor %}</select></label>
+<label>Adoptante<select name="id_persona" required>{% for p in adoptantes %}<option value="{{ p.id_persona }}">{{ p.nombre }}</option>{% endfor %}</select></label>
+<label>Observaciones<input name="observaciones" maxlength="200"></label><p><button>Registrar solicitud</button></p></form></details>
+<p class="chips" style="margin-top:1rem">{% for v, n in [('', 'Todas'), ('pendiente', 'Pendientes'), ('aprobada', 'Aprobadas'), ('rechazada', 'Rechazadas')] %}<a href="?estado={{ v }}" class="{{ 'on' if estado==v }}">{{ n }}</a>{% endfor %}</p>
+{% for s in filas %}<div class="card" style="margin-bottom:.8rem"><div class="cab" style="margin:0">
+<div class="fila"><div class="av {{ s.especie }}">{{ (s.animal or '?')[0] }}</div><div><h3 style="margin:0">{{ s.animal or 'Sin nombre' }} ← {{ s.solicitante }}</h3><small>{{ s.fecha_solicitud }}{% if s.observaciones %} · {{ s.observaciones }}{% endif %}</small></div></div>
+<span class="badge e-{{ s.estado }}">{{ s.estado }}</span></div>
+{% if s.estado == 'pendiente' %}<form method="post" action="{{ url_for('solicitud_resolver') }}" class="acc">
+<input type="hidden" name="_csrf" value="{{ csrf }}"><input type="hidden" name="id_animal" value="{{ s.id_animal }}"><input type="hidden" name="id_persona" value="{{ s.id_persona }}"><input type="hidden" name="fecha" value="{{ s.fecha_solicitud }}">
+<button name="accion" value="aprobar">Aprobar</button><button name="accion" value="rechazar" class="r">Rechazar</button></form>{% endif %}</div>
+{% else %}<div class="card vacio">No hay solicitudes.</div>{% endfor %}
+{% endblock %}

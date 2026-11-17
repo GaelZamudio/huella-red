@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block c %}
+<div class="cab"><div><h1>Rescates</h1><p>{{ filas|length }} resultados</p></div>
+{% if rol in ('app','admin') %}<a class="btn" href="{{ url_for('rescate_nuevo') }}">+ Registrar rescate</a>{% endif %}</div>
+<div class="card"><form class="filtros" method="get">
+<input name="q" placeholder="Buscar por lugar…" value="{{ q }}">
+<select name="tipo"><option value="">Todos los ingresos</option>{% for t in tipos %}<option value="{{ t }}" {{ 'selected' if tipo==t }}>{{ t.replace('_',' ') }}</option>{% endfor %}</select>
+<button>Filtrar</button> <a href="{{ url_for('rescates') }}">Limpiar</a></form></div>
+{% for r in filas %}<div class="card" style="margin-top:1rem">
+<div class="cab" style="margin:0"><h3>#{{ r.id_rescate }} · {{ r.zona }}</h3><span class="badge">{{ r.tipo_ingreso.replace('_',' ') }}</span></div>
+<p style="margin:.2rem 0">{{ r.descripcion_lugar }}</p>
+<dl><dt>Fecha</dt><dd>{{ r.fecha_hora.strftime('%d/%m/%Y %H:%M') }}</dd><dt>Condición</dt><dd>{{ r.condicion_inicial }}</dd>
+<dt>Rescatistas</dt><dd>{{ r.rescatistas or '—' }}</dd><dt>Animales</dt><dd>{{ r.animales }}</dd></dl></div>
+{% else %}<div class="card vacio" style="margin-top:1rem">No hay rescates con esos filtros.</div>{% endfor %}
+{% endblock %}

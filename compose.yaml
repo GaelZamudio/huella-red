@@ -67,6 +67,7 @@ services:
       LOGIN_PASS_APP: ${LOGIN_PASS_APP:?Completa LOGIN_PASS_APP en .env}
       LOGIN_PASS_CONSULTA: ${LOGIN_PASS_CONSULTA:?Completa LOGIN_PASS_CONSULTA en .env}
       LOGIN_PASS_ADMIN: ${LOGIN_PASS_ADMIN:?Completa LOGIN_PASS_ADMIN en .env}
+      MODO_DESARROLLO: ${MODO_DESARROLLO:-0}
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:

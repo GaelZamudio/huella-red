@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block c %}
+<h1>Registrar animal</h1>
+<form method="post"><input type="hidden" name="_csrf" value="{{ csrf }}">
+<label>Nombre (opcional)<input name="nombre" maxlength="50"></label>
+<label>Especie<select name="especie" id="esp" required>{% for e in especies %}<option>{{ e }}</option>{% endfor %}</select></label>
+<label>Sexo<select name="sexo" required><option>hembra</option><option>macho</option></select></label>
+<label>Nacimiento aproximado<input type="date" name="nacimiento"></label>
+<label>Color<input name="color" maxlength="50"></label>
+<label>Señas particulares<input name="senas" maxlength="200"></label>
+<label>Rescate de origen<select name="id_rescate" required>{% for r in rescates %}<option value="{{ r.id_rescate }}">#{{ r.id_rescate }} · {{ r.colonia }} · {{ r.fecha_hora.strftime('%d/%m/%Y') }}</option>{% endfor %}</select></label>
+<div data-esp="perro"><label>Tamaño<select name="tamano"><option>chico</option><option>mediano</option><option>grande</option></select></label>
+<label>Nivel de energía<select name="energia"><option>bajo</option><option>medio</option><option>alto</option></select></label>
+<label>Apto con niños<select name="apto_ninos"><option value="si">Sí</option><option value="no">No</option></select></label></div>
+<div data-esp="gato"><label>Prueba FIV<select name="fiv"><option value="">Sin dato</option><option value="si">Positivo</option><option value="no">Negativo</option></select></label>
+<label>Prueba FeLV<select name="felv"><option value="">Sin dato</option><option value="si">Positivo</option><option value="no">Negativo</option></select></label></div>
+<div data-esp="otro"><label>¿Qué especie es?<input name="descripcion_especie" maxlength="100" required></label>
+<label>Cuidados especiales<input name="cuidados" maxlength="200"></label></div>
+<p><button type="submit">Guardar animal</button></p></form>
+<script>const s=document.getElementById('esp');function f(){document.querySelectorAll('[data-esp]').forEach(e=>{const on=e.dataset.esp===s.value;e.hidden=!on;e.querySelectorAll('input,select').forEach(i=>i.disabled=!on)})}s.onchange=f;f()</script>
+{% endblock %}

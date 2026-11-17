@@ -142,7 +142,7 @@ def inicio():
 @app.get("/panel")
 @login_requerido
 def panel():
-    cifras, recientes = [], []
+    cifras, recientes, por_estado = [], [], []
     try:
         with conectar() as c:
             for nombre, tabla, cond in CONTADORES:
@@ -153,9 +153,12 @@ def panel():
                 "SELECT r.id_rescate, r.fecha_hora, r.tipo_ingreso, z.colonia, z.municipio "
                 "FROM rescate r JOIN zona z USING (id_zona) "
                 "ORDER BY r.fecha_hora DESC LIMIT 5").fetchall()
+            por_estado = c.execute("SELECT estado_actual AS estado, count(*) AS n "
+                                   "FROM animal GROUP BY 1 ORDER BY 2 DESC").fetchall()
     except psycopg.Error as e:
         flash(msg(e))
-    return render_template("panel.html", cifras=cifras, recientes=recientes)
+    return render_template("panel.html", cifras=cifras, recientes=recientes,
+                           por_estado=por_estado)
 
 
 @app.get("/m/<slug>")
@@ -205,3 +208,6 @@ def rescate_nuevo():
                 return redirect(url_for("modulo", slug="rescate"))
     return render_template("rescate_nuevo.html", zonas=zonas, rescatistas=rescatistas,
                            tipos=TIPOS_INGRESO, v=request.form)
+
+
+import flujos  # noqa: E402,F401  (registra las rutas de flujos.py)

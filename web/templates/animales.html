@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block c %}
+<div class="cab"><div><h1>Animales</h1><p>{{ filas|length }} resultados</p></div>
+{% if rol in ('app','admin') %}<a class="btn" href="{{ url_for('animal_nuevo') }}">+ Registrar animal</a>{% endif %}</div>
+<div class="card"><form class="filtros" method="get">
+<input name="q" placeholder="Buscar por nombre…" value="{{ q }}">
+<select name="especie"><option value="">Toda especie</option>{% for e in especies %}<option {{ 'selected' if especie==e }}>{{ e }}</option>{% endfor %}</select>
+<select name="estado"><option value="">Todo estado</option>{% for e in estados %}<option value="{{ e }}" {{ 'selected' if estado==e }}>{{ e.replace('_',' ') }}</option>{% endfor %}</select>
+<button>Filtrar</button> <a href="{{ url_for('animales') }}">Limpiar</a></form></div>
+<div class="cards">{% for a in filas %}<a class="card an" href="{{ url_for('animal_ficha', id=a.id_animal) }}">
+<div class="fila"><div class="av {{ a.especie }}">{{ (a.nombre or '?')[0] }}</div>
+<div><h3>{{ a.nombre or 'Sin nombre' }}</h3><small>{{ a.especie }} · {{ a.sexo }}{% if a.anios is not none %} · {{ a.anios }} {{ 'año' if a.anios==1 else 'años' }}{% endif %}</small></div></div>
+<p style="margin:.8rem 0 .5rem"><span class="badge e-{{ a.estado_actual }}">{{ a.estado_actual.replace('_',' ') }}</span></p>
+<small>Rescatado en {{ a.colonia }}</small></a>{% endfor %}</div>
+{% if not filas %}<div class="card vacio" style="margin-top:1rem">No hay animales con esos filtros.</div>{% endif %}
+{% endblock %}

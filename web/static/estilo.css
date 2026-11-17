@@ -37,3 +37,16 @@ td{padding:.55rem .6rem;border-bottom:1px solid var(--line)}tr:hover td{backgrou
 .rol:has(input:checked){border-color:var(--brand);background:#eaf3ee}.rol b{display:block}.rol small{color:var(--mut)}
 @media(max-width:820px){.app,.login{grid-template-columns:1fr}.hero{padding:1.6rem}.hero h1{font-size:1.7rem}
 .side{position:static;height:auto;display:none}#m:checked~.side{display:block}.burger{display:block;background:var(--side);color:#fff;padding:.8rem 1rem;font-weight:600}}
+.filtros{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}.filtros input,.filtros select{width:auto;flex:1;min-width:140px}
+.cards{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));margin-top:1rem}
+.an{display:block;text-decoration:none;color:inherit;transition:.15s}.an:hover{transform:translateY(-2px);box-shadow:0 8px 20px #1d2b2814}
+.fila{display:flex;gap:.8rem;align-items:center}
+.av{width:52px;height:52px;flex:none;border-radius:50%;display:grid;place-items:center;color:#fff;font:600 1.4rem Fraunces,Georgia,serif;background:var(--brand)}.av.gato{background:var(--acc)}.av.otro{background:#7b6bb0}
+.e-rescatado{background:#fde9c8;color:#8a5a0b}.e-en_atencion{background:#fbdcd8;color:#a1352b}.e-en_hogar_temporal{background:#dfe9f7;color:#2c5496}.e-disponible_adopcion{background:#dff0e5;color:#22633f}.e-adoptado{background:#e6e0f3;color:#51408c}.e-fallecido,.e-pendiente{background:#e8e6e1;color:#5a5a55}.e-aprobada{background:#dff0e5;color:#22633f}.e-rechazada{background:#fbdcd8;color:#a1352b}
+.linea{border-left:2px solid var(--line);margin:.6rem 0 0 .5rem;padding-left:1.2rem}.linea>div{position:relative;padding-bottom:1rem}.linea>div:before{content:"";position:absolute;left:-1.62rem;top:.4rem;width:10px;height:10px;border-radius:50%;background:var(--brand)}.linea small{color:var(--mut)}
+.barra-e{display:flex;align-items:center;gap:.6rem;margin:.5rem 0;font-size:.85rem}.barra-e i{height:10px;border-radius:5px;background:var(--brand);display:block}
+.dos{display:grid;gap:1rem;grid-template-columns:1.3fr 1fr}.dos.f{grid-template-columns:1fr 1.3fr}@media(max-width:820px){.dos,.dos.f{grid-template-columns:1fr}}
+.acc{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem}.btn.r,button.r{background:#b3392f}
+dl{display:grid;grid-template-columns:auto 1fr;gap:.3rem .9rem;margin:.6rem 0 0}dt{color:var(--mut)}dd{margin:0}
+.chips a{display:inline-block;padding:.3rem .8rem;border-radius:99px;border:1px solid var(--line);text-decoration:none;margin-right:.3rem;font-size:.85rem}.chips a.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+details.card summary{cursor:pointer;font-weight:600}

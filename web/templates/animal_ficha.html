@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block c %}
+<p><a href="{{ url_for('animales') }}">← Animales</a></p>
+<div class="dos f"><div class="card">
+<div class="fila"><div class="av {{ a.especie }}">{{ (a.nombre or '?')[0] }}</div>
+<div><h1 style="margin:0">{{ a.nombre or 'Sin nombre' }}</h1><span class="badge e-{{ a.estado_actual }}">{{ a.estado_actual.replace('_',' ') }}</span></div></div>
+<dl><dt>Especie</dt><dd>{{ a.especie }}</dd><dt>Sexo</dt><dd>{{ a.sexo }}</dd>
+<dt>Nacimiento</dt><dd>{{ a.fecha_nacimiento_aprox or '—' }}</dd><dt>Color</dt><dd>{{ a.color or '—' }}</dd>
+<dt>Señas</dt><dd>{{ a.senas or '—' }}</dd><dt>Madre</dt><dd>{{ a.madre or '—' }}</dd>
+<dt>Rescatado en</dt><dd>{{ a.colonia }}, {{ a.municipio }}</dd>
+{% for k, v in sub.items() if k != 'id_animal' %}<dt>{{ k.replace('_',' ') }}</dt><dd>{% if v is none %}—{% elif v is sameas true %}Sí{% elif v is sameas false %}No{% else %}{{ v }}{% endif %}</dd>{% endfor %}</dl>
+<form method="post" action="{{ url_for('animal_estado', id=a.id_animal) }}" style="margin-top:1.2rem">
+<input type="hidden" name="_csrf" value="{{ csrf }}"><label for="est">Cambiar estado</label>
+<div class="acc"><select id="est" name="estado" style="flex:1">{% for e in estados %}<option value="{{ e }}" {{ 'selected' if e==a.estado_actual }}>{{ e.replace('_',' ') }}</option>{% endfor %}</select><button>Actualizar</button></div></form></div>
+<div class="card"><h2>Historial</h2><div class="linea">{% for f, t, d in ev %}<div><b>{{ t }}</b><br><small>{{ f.strftime('%d/%m/%Y') }}{% if d %} · {{ d }}{% endif %}</small></div>{% endfor %}</div></div></div>
+{% endblock %}
